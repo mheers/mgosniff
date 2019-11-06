@@ -99,3 +99,9 @@ $ mgosniff
 2015/11/29 17:05:48 parser.go:252: [127.0.0.1:52117] close connection:127.0.0.1:27017
 ```
 
+# Run locally
+```
+dep init
+dep ensure
+go run .
+```
