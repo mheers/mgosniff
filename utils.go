@@ -97,7 +97,7 @@ func ReadOne(r io.Reader) (nBytes int32, buf []byte) {
 		panic(err)
 	}
 
-	nBytes = int32(nb+4)
+	nBytes = int32(nb + 4)
 
 	return nBytes, buf
 }

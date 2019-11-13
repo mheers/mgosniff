@@ -79,7 +79,7 @@ func (self *Parser) Close() {
 	self.Pw.Close()
 }
 
-func (self *Parser) ParseQuery(header MsgHeader, r io.Reader) {
+func (self *Parser) ParseQuery(header MsgHeader, r io.Reader) string {
 	flag := MustReadInt32(r)
 	fullCollectionName := ReadCString(r)
 	numberToSkip := MustReadInt32(r)
@@ -97,6 +97,7 @@ func (self *Parser) ParseQuery(header MsgHeader, r io.Reader) {
 		query,
 		selector,
 	)
+	return query
 }
 
 func (self *Parser) ParseInsert(header MsgHeader, r io.Reader) {
@@ -272,7 +273,7 @@ func (self *Parser) ParseMsgNew(header MsgHeader, r io.Reader) {
 			)
 		case 1:
 			ssize := MustReadInt32(rd)
-			r1 := &io.LimitedReader{R: rd, N: int64(ssize-4)}
+			r1 := &io.LimitedReader{R: rd, N: int64(ssize - 4)}
 			documentSequenceIdentifier := ReadCString(r1)
 
 			_, bsons := ReadDocumentsSz(r1)
@@ -319,7 +320,7 @@ func (self *Parser) ParseCommandReply(header MsgHeader, r io.Reader) {
 func (self *Parser) Parse(r *io.PipeReader) {
 	defer func() {
 		if e := recover(); e != nil {
-			log.Printf("[%s] parser failed, painc: %v\n", self.RemoteAddr, e)
+			log.Printf("[%s] parser failed, panic: %v\n", self.RemoteAddr, e)
 			self.isPwClosed = true
 			self.Pw.Close()
 		}
